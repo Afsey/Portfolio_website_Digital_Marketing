@@ -18,11 +18,55 @@ import {
   PenTool, 
   Video, 
   Sparkles, 
-  Zap 
+  Zap,
+  Mail,
+  ArrowUp,
+  MessageCircle,
+  Share2
 } from 'lucide-react';
 import myProfileImg from './assets/Hero_Section_myimage.jpeg';
 
-// 7 Projects Data with custom colored accents, descriptions, case study details, and campaign metrics.
+// Custom SVG Brand Icons since Lucide v1.0.0 removed them
+const Instagram = ({ size = 24, ...props }) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    {...props}
+  >
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+  </svg>
+);
+
+const Linkedin = ({ size = 24, ...props }) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    {...props}
+  >
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+    <rect x="2" y="9" width="4" height="12"></rect>
+    <circle cx="4" cy="4" r="2"></circle>
+  </svg>
+);
+
+
+// 7 Projects Data with rich high-saturation color accents
 const projectsData = [
   {
     id: 'adzum',
@@ -173,20 +217,21 @@ const projectsData = [
   }
 ];
 
-// Companies Logo loop list
+// Partnered Companies
 const companies = [
-  { name: 'AdzumGlobal', color: 'bg-indigo-500' },
-  { name: 'Synops Labs', color: 'bg-emerald-500' },
-  { name: 'Marketingwithafsal', color: 'bg-blue-500' },
-  { name: 'Neoverse', color: 'bg-orange-500' },
-  { name: 'Gameson', color: 'bg-red-500' },
-  { name: 'Equsterian oman', color: 'bg-amber-500' },
-  { name: 'Adpersona', color: 'bg-pink-500' },
-  { name: 'Growx', color: 'bg-teal-500' }
+  { name: 'AdzumGlobal', color: 'bg-indigo-600' },
+  { name: 'Synops Labs', color: 'bg-emerald-600' },
+  { name: 'Marketingwithafsal', color: 'bg-blue-600' },
+  { name: 'Neoverse', color: 'bg-orange-600' },
+  { name: 'Gameson', color: 'bg-red-600' },
+  { name: 'Equsterian oman', color: 'bg-amber-600' },
+  { name: 'Adpersona', color: 'bg-pink-600' },
+  { name: 'Growx', color: 'bg-teal-600' }
 ];
 
 export default function App() {
   const [scrolled, setScrolled] = useState(false);
+  const [headerVisible, setHeaderVisible] = useState(true);
   const [activeModal, setActiveModal] = useState(null);
   
   // Custom Form states
@@ -195,6 +240,13 @@ export default function App() {
   const [formMessage, setFormMessage] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Floating widgets states
+  const [socialsExpanded, setSocialsExpanded] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  // Scroll position & direction refs
+  const lastScrollY = useRef(0);
 
   // Scroll reveal references
   const row2Ref = useRef(null);
@@ -208,108 +260,207 @@ export default function App() {
   const [aboutActive, setAboutActive] = useState(false);
   const [contactActive, setContactActive] = useState(false);
 
-  // 1. Sticky Header scroll listener
+  // 1. Sticky Header scroll listener (sticks when scrolling down, hides when scrolling up)
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
+      const currentScrollY = window.scrollY;
+
+      // Toggle back-to-top button visibility
+      if (currentScrollY > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+
+      // Always show header at the very top of the page
+      if (currentScrollY < 50) {
+        setHeaderVisible(true);
+        setScrolled(false);
+        lastScrollY.current = currentScrollY;
+        return;
+      }
+
+      if (currentScrollY > 20) {
         setScrolled(true);
       } else {
         setScrolled(false);
       }
+
+      if (currentScrollY > lastScrollY.current) {
+        // User is scrolling down -> make header stick (visible)
+        setHeaderVisible(true);
+      } else {
+        // User is scrolling up -> header disappears (hidden)
+        setHeaderVisible(false);
+      }
+      lastScrollY.current = currentScrollY;
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // 2. Cursor canvas particle trail animation logic
+  // 2. Interactive Canvas 3D Grid Background Animation (strictly inside Hero, dark tiles, red/pink/violet backlight)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let animationFrameId;
 
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    let width = (canvas.width = canvas.offsetWidth);
+    let height = (canvas.height = canvas.offsetHeight);
 
     const handleResize = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      if (!canvas) return;
+      width = canvas.width = canvas.offsetWidth;
+      height = canvas.height = canvas.offsetHeight;
     };
     window.addEventListener('resize', handleResize);
 
-    const particles = [];
-    const maxParticles = 60;
-    let mouse = { x: null, y: null, active: false };
+    // Grid size setup (approx 72px square plates)
+    const cellSize = 72;
+    const gap = 5;
+    const depth = 5; // Bevel depth for 3D extrusion
+    let cols = Math.ceil(width / cellSize);
+    let rows = Math.ceil(height / cellSize);
+
+    // Smooth cursor lag/easing values
+    let targetMouse = { x: width / 2, y: height / 2, active: false };
+    let currentMouse = { x: width / 2, y: height / 2, active: false };
 
     const handleMouseMove = (e) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-      mouse.active = true;
-
-      // Add a couple of particles on mouse move
-      for (let i = 0; i < 2; i++) {
-        particles.push({
-          x: mouse.x,
-          y: mouse.y,
-          vx: (Math.random() - 0.5) * 1.5,
-          vy: (Math.random() - 0.5) * 1.5,
-          size: Math.random() * 6 + 4,
-          // Shift color dynamically
-          color: `hsla(${Math.floor(Math.random() * 60 + 200)}, 85%, 60%, ${Math.random() * 0.4 + 0.3})`,
-          life: 1.0,
-          decay: Math.random() * 0.02 + 0.015
-        });
-      }
+      const rect = canvas.getBoundingClientRect();
+      targetMouse.x = e.clientX - rect.left;
+      targetMouse.y = e.clientY - rect.top;
+      targetMouse.active = true;
+      currentMouse.active = true;
     };
 
     const handleMouseLeave = () => {
-      mouse.active = false;
+      targetMouse.active = false;
     };
 
+    // Listen to mouse events on the window, but map coordinates locally
     window.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseleave', handleMouseLeave);
 
-    // Animation Loop
+    let time = 0;
+
+    // Animation loop
     const draw = () => {
+      if (!canvas || !ctx) return;
       ctx.clearRect(0, 0, width, height);
+      time += 1;
 
-      // Draw particle trails
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.life -= p.decay;
-        p.size *= 0.98;
+      cols = Math.ceil(width / cellSize);
+      rows = Math.ceil(height / cellSize);
 
-        if (p.life <= 0 || p.size <= 0.5) {
-          particles.splice(i, 1);
-          continue;
-        }
-
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
+      // Apply ease-lag to cursor coordinates for fluid motion
+      if (targetMouse.active) {
+        currentMouse.x += (targetMouse.x - currentMouse.x) * 0.08;
+        currentMouse.y += (targetMouse.y - currentMouse.y) * 0.08;
+      } else {
+        // Ambient slow center floating when cursor is inactive
+        const idleX = width / 2 + Math.sin(time * 0.006) * (width * 0.15);
+        const idleY = height / 2 + Math.cos(time * 0.008) * (height * 0.15);
+        currentMouse.x += (idleX - currentMouse.x) * 0.03;
+        currentMouse.y += (idleY - currentMouse.y) * 0.03;
       }
 
-      // Draw subtle connecting lines if close enough
-      if (particles.length > 1) {
-        ctx.beginPath();
-        for (let i = 0; i < particles.length - 1; i++) {
-          const p1 = particles[i];
-          const p2 = particles[i + 1];
-          const dx = p1.x - p2.x;
-          const dy = p1.y - p2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+      // STEP 1: Draw a dark base background first
+      ctx.fillStyle = '#0b0c10'; // Premium dark base color
+      ctx.fillRect(0, 0, width, height);
 
-          if (dist < 80) {
-            ctx.strokeStyle = `rgba(59, 130, 246, ${0.12 * p1.life})`;
-            ctx.lineWidth = p1.size * 0.2;
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-          }
+      // STEP 2: Draw the vibrant backlight centered at the mouse coordinates
+      const gradientRadius = 320;
+      const lightGrad = ctx.createRadialGradient(
+        currentMouse.x,
+        currentMouse.y,
+        0,
+        currentMouse.x,
+        currentMouse.y,
+        gradientRadius
+      );
+
+      // Saturated Red -> Pink -> Violet Gradient matching overall theme
+      lightGrad.addColorStop(0, 'rgba(239, 68, 68, 0.45)');   // Saturated Red
+      lightGrad.addColorStop(0.35, 'rgba(236, 72, 153, 0.35)'); // Saturated Pink
+      lightGrad.addColorStop(0.7, 'rgba(124, 58, 237, 0.22)');  // Saturated Violet/Indigo
+      lightGrad.addColorStop(1, 'rgba(11, 12, 16, 0)');          // Fade to black
+
+      ctx.fillStyle = lightGrad;
+      ctx.beginPath();
+      ctx.arc(currentMouse.x, currentMouse.y, gradientRadius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // STEP 3: Draw beveled dark charcoal-black squares over the glow
+      for (let c = 0; c < cols; c++) {
+        for (let r = 0; r < rows; r++) {
+          const cellCenterX = c * cellSize + cellSize / 2;
+          const cellCenterY = r * cellSize + cellSize / 2;
+
+          // Vector distance to cursor/light
+          const dx = currentMouse.x - cellCenterX;
+          const dy = currentMouse.y - cellCenterY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const maxDist = 320;
+          const proximity = Math.max(0, 1 - dist / maxDist); // 1.0 at light, 0.0 far away
+
+          // Sine-wave floating variables with speed acceleration based on cursor proximity
+          const localTime = time * 0.015 + (c * 0.3) + (r * 0.25) + (proximity * 2.5);
+
+          // Looping fluid floats
+          const fx = Math.sin(localTime) * (2.0 + proximity * 7.0);
+          const fy = Math.cos(localTime * 0.8) * (2.0 + proximity * 7.0);
+
+          // 3D Parallax Tilt (plates tilt slightly toward/away from backlight)
+          const tiltX = -(dx / maxDist) * (4 + proximity * 8);
+          const tiltY = -(dy / maxDist) * (4 + proximity * 8);
+
+          // Plate bounds
+          const px = c * cellSize + gap / 2 + fx + tiltX;
+          const py = r * cellSize + gap / 2 + fy + tiltY;
+          const w = cellSize - gap;
+          const h = cellSize - gap;
+
+          // Shaded bottom bevel (3D side)
+          ctx.fillStyle = `rgb(${Math.max(5, 12 - Math.floor(proximity * 6))}, ${Math.max(5, 12 - Math.floor(proximity * 6))}, ${Math.max(5, 14 - Math.floor(proximity * 6))})`;
+          ctx.beginPath();
+          ctx.moveTo(px, py + h);
+          ctx.lineTo(px + w, py + h);
+          ctx.lineTo(px + w + depth, py + h + depth);
+          ctx.lineTo(px + depth, py + h + depth);
+          ctx.closePath();
+          ctx.fill();
+
+          // Shaded right bevel (3D side)
+          ctx.fillStyle = `rgb(${Math.max(8, 16 - Math.floor(proximity * 8))}, ${Math.max(8, 16 - Math.floor(proximity * 8))}, ${Math.max(8, 18 - Math.floor(proximity * 8))})`;
+          ctx.beginPath();
+          ctx.moveTo(px + w, py);
+          ctx.lineTo(px + w + depth, py + depth);
+          ctx.lineTo(px + w + depth, py + h + depth);
+          ctx.lineTo(px + w, py + h);
+          ctx.closePath();
+          ctx.fill();
+
+          // Save canvas context to draw front faces
+          ctx.save();
+
+          // Keep the front face dark and uniform (no cursor/torch highlight on top)
+          const faceColorValue = 12; // A constant very dark charcoal color
+          ctx.fillStyle = `rgb(${faceColorValue}, ${faceColorValue}, ${faceColorValue + 1})`;
+          
+          ctx.beginPath();
+          ctx.rect(px, py, w, h);
+          ctx.fill();
+
+          // A constant very faint border to keep plates visually separated, without proximity highlight
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.025)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          ctx.restore();
         }
-        ctx.stroke();
       }
 
       animationFrameId = requestAnimationFrame(draw);
@@ -325,12 +476,12 @@ export default function App() {
     };
   }, []);
 
-  // 3. Scroll Reveal / Row-by-row slide-up trigger logic using IntersectionObserver
+  // 3. Scroll Reveal observer logic
   useEffect(() => {
     const observerOptions = {
       root: null,
       threshold: 0.15,
-      rootMargin: '0px 0px -50px 0px' // triggers slightly before it enters the viewport fully
+      rootMargin: '0px 0px -50px 0px'
     };
 
     const handleIntersect = (entries) => {
@@ -361,17 +512,37 @@ export default function App() {
     };
   }, []);
 
-  // Contact Form submit logic
-  const handleFormSubmit = (e) => {
+  // Contact Form submit logic using free FormSubmit API
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (formName.trim() && formEmail.trim() && formMessage.trim()) {
       setFormSubmitted(true);
-      setTimeout(() => {
-        setFormName('');
-        setFormEmail('');
-        setFormMessage('');
-        setFormSubmitted(false);
-      }, 5000);
+      try {
+        const response = await fetch("https://formsubmit.co/ajax/marketingwithafsal@gmail.com", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            name: formName,
+            email: formEmail,
+            message: formMessage,
+            _subject: `New Message from Portfolio: ${formName}`
+          })
+        });
+        if (response.ok) {
+          setFormName('');
+          setFormEmail('');
+          setFormMessage('');
+        }
+      } catch (err) {
+        console.error("Form submission error:", err);
+      } finally {
+        setTimeout(() => {
+          setFormSubmitted(false);
+        }, 5000);
+      }
     }
   };
 
@@ -393,20 +564,13 @@ export default function App() {
 
   return (
     <>
-      {/* Background aesthetics */}
-      <div className="bg-grid-overlay"></div>
-      <div className="bg-gradient-glow"></div>
-      <div className="bg-gradient-glow-left"></div>
-
-      {/* Dynamic Physics Cursor Trails */}
-      <canvas ref={canvasRef} className="cursor-canvas"></canvas>
-
       <div className="app-container">
-        {/* Modern Glassmorphic Header */}
-        <header className={`header ${scrolled ? 'scrolled' : ''}`}>
+        {/* Sticky Header with Scroll Direction Physics & Mobile Capsule design */}
+        <header className={`header ${scrolled ? 'scrolled' : ''} ${headerVisible ? 'header-visible' : 'header-hidden'}`}>
           <div className="container header-inner">
             <a href="#" className="logo-text" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
-              <Zap size={20} className="text-blue-500 fill-blue-500" />
+              {/* Lightning symbol replaced with tiny circular picture avatar */}
+              <img src={myProfileImg} alt="Afsal Muhammad N" className="header-avatar" />
               AFSAL MUHAMMAD N.
             </a>
 
@@ -442,50 +606,42 @@ export default function App() {
             <button className="menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               <Menu size={24} />
             </button>
-          </div>
 
-          {/* Mobile Dropdown Menu */}
-          {mobileMenuOpen && (
-            <div 
-              style={{
-                position: 'absolute',
-                top: '100%',
-                left: 0,
-                width: '100%',
-                background: 'rgba(255, 255, 255, 0.98)',
-                backdropFilter: 'blur(10px)',
-                borderBottom: '1px solid #e2e8f0',
-                padding: '1.5rem',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '1.25rem',
-                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05)'
-              }}
-            >
-              <a href="#home" style={{ fontSize: '1rem', fontWeight: 600, color: '#0f172a' }} onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>Home</a>
-              <a href="#projects" style={{ fontSize: '1rem', fontWeight: 600, color: '#0f172a' }} onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}>Projects</a>
-              <a href="#about" style={{ fontSize: '1rem', fontWeight: 600, color: '#0f172a' }} onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>About Me</a>
-              <a href="#contact" style={{ fontSize: '1rem', fontWeight: 600, color: '#0f172a' }} onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Contact</a>
-            </div>
-          )}
+            {/* Mobile Floating Dropdown Menu */}
+            {mobileMenuOpen && (
+              <div className="mobile-dropdown">
+                <a href="#home" style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }} onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>Home</a>
+                <a href="#projects" style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }} onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}>Projects</a>
+                <a href="#about" style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }} onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>About Me</a>
+                <a href="#contact" style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }} onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Contact</a>
+              </div>
+            )}
+          </div>
         </header>
 
         {/* Hero Section */}
         <section id="home" className="hero-section">
+          {/* Interactive Grid Canvas Container (Contained strictly within Hero, Dark Theme layout) */}
+          <div className="hero-canvas-container">
+            <canvas ref={canvasRef} className="hero-canvas"></canvas>
+          </div>
           <div className="container hero-grid">
             <div className="hero-left">
               <div className="tagline-badge">
                 Digital Marketing Specialist
               </div>
+              {/* Updated Copywriting Title */}
               <h1 className="hero-title">
-                Crafting High-Growth <span>Digital Strategies.</span>
+                Beyond Marketing, <span>I Build Brand Success.</span>
               </h1>
+              {/* Updated Copywriting Description */}
               <p className="hero-desc">
-                Hi, I'm **Afsal Muhammad N**. I help ambitious brands build visual authority, script high-performance content, and scale their customer acquisition funnels through precise, result-oriented digital marketing.
+                Hi, I'm Afsal Muhammad N. I help ambitious brands build authority, script high performance content, and scale their customer acquisition funnels through precise, result oriented digital marketing.
               </p>
               <div className="hero-actions">
+                {/* Updated button text */}
                 <a href="#projects" className="btn-primary" onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}>
-                  View Case Studies
+                  View Works Done
                   <ArrowRight size={16} />
                 </a>
                 <a href="#contact" className="btn-secondary" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>
@@ -495,11 +651,12 @@ export default function App() {
             </div>
             
             <div className="hero-right">
+              {/* Updated to a clean, minimal rounded rectangular tab frame */}
               <div className="profile-frame">
                 <div className="profile-img-container">
                   <img 
                     src={myProfileImg} 
-                    alt="Afsal Muhammad N - Digital Marketing Specialist" 
+                    alt="Afsal Muhammad N" 
                     className="profile-img"
                   />
                 </div>
@@ -508,7 +665,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* Vertical Looping Company Ticker Section */}
+        {/* Horizontal Looping Company Ticker Section */}
         <section className="company-marquee-section">
           <div className="container company-container">
             <div className="company-title-wrapper">
@@ -516,11 +673,9 @@ export default function App() {
               <p>Driving marketing initiatives and digital growth for leading companies and agencies.</p>
             </div>
             
-            {/* The Vertical Looping Marquee container */}
-            <div className="vertical-marquee-viewport">
-              <div className="vertical-marquee-track">
-                {/* Double the list of companies to ensure a seamless vertical loop */}
-                {[...companies, ...companies, ...companies].map((c, index) => (
+            <div className="horizontal-marquee-viewport">
+              <div className="horizontal-marquee-track">
+                {[...companies, ...companies, ...companies, ...companies].map((c, index) => (
                   <div key={index} className="company-logo-card">
                     <span className={`dot ${c.color}`} style={{ width: 8, height: 8, borderRadius: '50%', display: 'inline-block' }}></span>
                     {c.name}
@@ -536,7 +691,7 @@ export default function App() {
           <div className="container">
             <div className="section-header">
               <div className="section-subtitle">Portfolio</div>
-              <h2 className="section-title">Featured Case Studies</h2>
+              <h2 className="section-title">Featured Works</h2>
               <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', marginTop: '0.5rem' }}>
                 Explore real results across Web Design, Social Campaigns, PPC advertising, Copywriting, and Video Creative Scripting.
               </p>
@@ -545,7 +700,7 @@ export default function App() {
             {/* 3x3 Project Card Grid Layout */}
             <div className="projects-grid">
               
-              {/* ROW 1: Projects 1, 2, 3 (Initially Active / Always Visible on enter) */}
+              {/* ROW 1: Projects 1, 2, 3 (Always Visible on enter) */}
               <div className="project-row scroll-reveal-row active">
                 {projectsData.slice(0, 3).map((project) => {
                   const IconComponent = project.icon;
@@ -711,41 +866,58 @@ export default function App() {
           )}
         </div>
 
-        {/* About & Location Section (Fades/Slides up together) */}
+        {/* About & Location Section */}
         <section id="about" className="about-section">
           <div ref={aboutRef} className={`container about-grid scroll-reveal-row ${aboutActive ? 'active' : ''}`}>
             
             <div className="about-left">
-              <div className="section-subtitle">Background</div>
-              <h2 className="section-title">Who Is Afsal Muhammad N?</h2>
-              <p className="about-text">
-                As a dedicated **Digital Marketing Specialist**, I stand at the intersection of business strategy, consumer psychology, and modern visual design. My focus is simple: **to craft campaigns that capture attention and drive direct revenue.**
-              </p>
-              <p className="about-text" style={{ color: 'var(--text-secondary)' }}>
-                Whether it is building custom, high-speed WordPress/Webflow platforms, scripting short-form video clips that command high retention, or launching full advertising structures on Google and Meta Ads, I design end-to-end growth cycles tailored to target metrics.
-              </p>
+              <div className="bubble-badge">Know Me</div>
+              <h2 className="section-title">Why Afsal Muhammad</h2>
               
-              <div style={{ marginTop: '1.5rem' }}>
-                <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.85rem' }}>Core Professional Skills</h4>
-                <div className="skills-container">
-                  {[
-                    { name: 'Omni-channel PPC Campaigns', color: 'bg-blue-500' },
-                    { name: 'Copywriting & Script Writing', color: 'bg-purple-500' },
-                    { name: 'WordPress & Webflow Architecture', color: 'bg-emerald-500' },
-                    { name: 'Lead Generation Funnels', color: 'bg-amber-500' },
-                    { name: 'Short-form Content Strategy', color: 'bg-rose-500' },
-                    { name: 'Conversion Rate Optimization (CRO)', color: 'bg-teal-500' }
-                  ].map((skill, index) => (
-                    <div key={index} className="skill-badge">
-                      <span className={`bullet ${skill.color}`}></span>
-                      {skill.name}
-                    </div>
-                  ))}
+              <div className="about-content" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                <p className="about-text" style={{ fontWeight: 700, fontSize: '1.25rem', color: 'var(--text-primary)', lineHeight: 1.35 }}>
+                  How do I position myself as a Digital Marketing expert?
+                </p>
+                <p className="about-text" style={{ color: 'var(--text-secondary)' }}>
+                  In today's digital landscape, every business needs to stand out. That's where I come in! As a passionate digital marketer, I specialize in crafting strategies that don't just look good, but deliver tangible results.
+                </p>
+                <p className="about-text" style={{ color: 'var(--text-secondary)' }}>
+                  I've got a deep understanding of SEO strategies, not just for improving search rankings and click-through rates, but also for optimizing your website for generative engines and AI.
+                </p>
+                
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(37, 99, 235, 0.05)', borderLeft: '4px solid #2563eb', padding: '0.85rem 1.25rem', borderRadius: '8px', margin: '0.5rem 0' }}>
+                  <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>✅</span>
+                  <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.95rem' }}>This means higher traffic and better performance where it counts.</span>
                 </div>
+
+                <div style={{ marginTop: '0.5rem' }}>
+                  <h4 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: '1rem', color: 'var(--text-primary)' }}>My expertise covers:</h4>
+                  <div className="motion-skills-container">
+                    {[
+                      { name: 'Social Media Marketing', color: 'purple', anim: '1' },
+                      { name: 'SEO & Website Optimization', color: 'green', anim: '2' },
+                      { name: 'Google Ads & Paid Advertising', color: 'blue', anim: '3' },
+                      { name: 'Content and Email Marketing', color: 'rose', anim: '4' },
+                      { name: 'Also a Freelancer', color: 'teal', anim: '5' }
+                    ].map((skill, index) => (
+                      <div 
+                        key={index} 
+                        className={`motion-bubble-skill bubble-skill-${skill.color} bubble-anim-${skill.anim}`}
+                      >
+                        <span style={{ fontSize: '1rem' }}>✨</span>
+                        {skill.name}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <p className="about-text" style={{ color: 'var(--text-secondary)', marginTop: '1rem' }}>
+                  Let's turn your brand into an unforgettable experience that people recall, engage with, and eagerly buy into. Ready to Transform Your Online Presence?
+                </p>
               </div>
             </div>
 
-            <div className="about-right">
+            <div className="about-right" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               {/* Creative Location Card */}
               <div className="location-card">
                 <div className="location-card-header">
@@ -754,21 +926,79 @@ export default function App() {
                   </div>
                   <div>
                     <h4 className="location-title">Current Base</h4>
-                    <p className="location-subtitle">Kozhikode, Kerala, India</p>
+                    <p className="location-subtitle">Kallambalam, Trivandrum, Kerala, India</p>
                   </div>
                 </div>
 
-                {/* Minimalist interactive visual map graphic */}
+                {/* Real interactive Google Map embed */}
                 <div className="map-canvas-visual">
-                  <div className="map-dots"></div>
-                  <div className="map-road-1"></div>
-                  <div className="map-road-2"></div>
-                  <div className="map-pulse-pin"></div>
+                  <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3941.670691703698!2d76.7904128!3d8.7709322!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b05ec2c322b7c4d%3A0xbb1a3fa41fb525f2!2sKallambalam%2C%20Kerala!5e0!3m2!1sen!2sin!4v1717396000000!5m2!1sen!2sin" 
+                    width="100%" 
+                    height="100%" 
+                    style={{ border: 0 }} 
+                    allowFullScreen="" 
+                    loading="lazy" 
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Afsal Muhammad N Location Map"
+                  ></iframe>
                 </div>
 
                 <div className="location-info-footer">
                   <Globe size={14} style={{ color: 'var(--text-tertiary)' }} />
                   <span>Available for global remote contracts and onsite consulting.</span>
+                </div>
+              </div>
+
+              {/* Personal Website Tab/Card */}
+              <div className="website-showcase-card">
+                <div className="website-card-header">
+                  <div className="website-icon-wrapper">
+                    <Globe size={22} />
+                  </div>
+                  <div>
+                    <h4 className="website-title">Official Blog & Agency</h4>
+                    <a 
+                      href="https://marketingwithafsal.com/" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="website-link"
+                    >
+                      marketingwithafsal.com
+                    </a>
+                  </div>
+                </div>
+
+                <div className="website-card-body">
+                  <p>Access free digital marketing templates, in-depth growth case studies, and book direct consultations.</p>
+                  <div className="browser-mockup">
+                    <div className="browser-header">
+                      <span className="mock-dot red"></span>
+                      <span className="mock-dot yellow"></span>
+                      <span className="mock-dot green"></span>
+                      <div className="mock-address-bar">https://marketingwithafsal.com</div>
+                    </div>
+                    <div className="browser-body">
+                      <div className="mock-hero">
+                        <span className="mock-logo">M</span>
+                        <div className="mock-lines">
+                          <div className="mock-line-long"></div>
+                          <div className="mock-line-short"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="website-card-footer">
+                  <a 
+                    href="https://marketingwithafsal.com/" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="visit-website-btn"
+                  >
+                    Explore Platform <ExternalLink size={14} />
+                  </a>
                 </div>
               </div>
             </div>
@@ -795,6 +1025,20 @@ export default function App() {
                   <div>
                     <div className="contact-item-title">Phone & WhatsApp</div>
                     <div className="contact-item-value">+91 8078873963</div>
+                  </div>
+                </div>
+
+                <div className="contact-item">
+                  <div className="contact-icon-box">
+                    <Mail size={18} />
+                  </div>
+                  <div>
+                    <div className="contact-item-title">Email</div>
+                    <div className="contact-item-value">
+                      <a href="mailto:marketingwithafsal@gmail.com" style={{ color: 'inherit', textDecoration: 'none' }}>
+                        marketingwithafsal@gmail.com
+                      </a>
+                    </div>
                   </div>
                 </div>
 
@@ -934,6 +1178,59 @@ export default function App() {
             </p>
           </div>
         </footer>
+
+        {/* Floating Social Media Expandable FAB on bottom left */}
+        <div className={`floating-social-fab ${socialsExpanded ? 'expanded' : ''}`}>
+          <div className="fab-options">
+            <a 
+              href="https://wa.me/918078873963" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="fab-option whatsapp" 
+              aria-label="Contact on WhatsApp"
+            >
+              <MessageCircle size={18} />
+              <span className="tooltip">WhatsApp</span>
+            </a>
+            <a 
+              href="https://www.instagram.com/afsalmuhammad.n?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="fab-option instagram" 
+              aria-label="Follow on Instagram"
+            >
+              <Instagram size={18} />
+              <span className="tooltip">Instagram</span>
+            </a>
+            <a 
+              href="https://www.linkedin.com/in/afsalmuhammadn" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="fab-option linkedin" 
+              aria-label="Connect on LinkedIn"
+            >
+              <Linkedin size={18} />
+              <span className="tooltip">LinkedIn</span>
+            </a>
+          </div>
+          <button 
+            className="fab-main-btn" 
+            onClick={() => setSocialsExpanded(!socialsExpanded)}
+            aria-label="Expand Social Channels"
+          >
+            <Share2 size={22} className="share-icon" />
+            <X size={22} className="close-icon" />
+          </button>
+        </div>
+
+        {/* Scroll to top button */}
+        <button 
+          className={`scroll-to-top-btn ${showScrollTop ? 'visible' : ''}`}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="Scroll to top"
+        >
+          <ArrowUp size={20} />
+        </button>
       </div>
     </>
   );
