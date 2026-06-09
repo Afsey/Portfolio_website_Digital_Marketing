@@ -212,6 +212,28 @@ const projectsData = [
       { label: 'Brand Mentions Scaled', value: '+410%' },
       { label: 'Video Scripts Authored', value: '120+' }
     ]
+  },
+  {
+    id: 'marketingwithafsal',
+    title: 'Marketingwithafsal',
+    category: 'Personal Branding & SEO',
+    accent: 'marketingwithafsal',
+    icon: Globe,
+    desc: 'Created a personal branding website using WordPress and Elementor. Optimized for organic SEO, AI search engines (AI SEO), and GEO, ranking key search queries in Google, Yahoo, and Bing.',
+    fullDesc: 'As a Freelance Digital Marketer in Trivandrum, I built my personal branding platform using WordPress, Elementor, WP Forms, and custom plugins. I implemented advanced SEO, AI SEO, and Generative Engine Optimization (GEO) frameworks, successfully ranking localized target keywords in Google, Yahoo, and Bing search results (last checked Dec 2025), as well as Google Image search.',
+    goals: 'Build an authoritative personal branding hub, achieve top search rankings for local digital marketing services, and secure visibility in generative AI search engines.',
+    strategy: [
+      'Built a fully responsive portfolio site using WordPress, Elementor Pro, and contact modules.',
+      'Optimized target keywords for high rankings in Google, Yahoo, and Bing across text and image search.',
+      'Integrated schema markup and structured data to ensure high indexability by AI search engines (GEO).',
+      'Leveraged organic search optimization to generate high-intent inbound clients.'
+    ],
+    metrics: [
+      { label: 'Organic Clients Acquired', value: '5+' },
+      { label: 'Visible in AI Search / GEO', value: 'Showed' },
+      { label: 'LinkedIn Ranked in Google', value: 'AFSAL MUHAMMAD N' },
+      { label: 'Organic Visitor Growth', value: 'Engagement' }
+    ]
   }
 ];
 
@@ -760,9 +782,9 @@ export default function App() {
                 })}
               </div>
 
-              {/* ROW 3: Project 7 (Fades/Slides up when user scrolls further) */}
+              {/* ROW 3: Project 7 & 8 (Fades/Slides up when user scrolls further) */}
               <div ref={row3Ref} className={`project-row scroll-reveal-row ${row3Active ? 'active' : ''}`}>
-                {projectsData.slice(6, 7).map((project) => {
+                {projectsData.slice(6, 8).map((project) => {
                   const IconComponent = project.icon;
                   return (
                     <article key={project.id} className={`project-tab card-${project.accent}`}>

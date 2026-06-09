@@ -24,6 +24,7 @@
   --color-equestrian: 38, 100%, 50%;   /* Bright Saturated Amber */
   --color-adpersona: 326, 100%, 50%;  /* Saturated Vivid Magenta */
   --color-growx: 180, 100%, 38%;      /* Saturated Deep Cyan */
+  --color-marketingwithafsal: 200, 100%, 45%; /* Saturated Sky Blue / Ocean Blue */
 
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 8px 20px -6px rgba(15, 23, 42, 0.06);
@@ -921,6 +922,7 @@ a {
 .project-tab.card-equestrian { --card-accent: var(--color-equestrian); }
 .project-tab.card-adpersona { --card-accent: var(--color-adpersona); }
 .project-tab.card-growx { --card-accent: var(--color-growx); }
+.project-tab.card-marketingwithafsal { --card-accent: var(--color-marketingwithafsal); }
 
 /* Hover animations under each tab */
 .project-tab::before {
