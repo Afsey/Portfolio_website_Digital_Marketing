@@ -74,7 +74,7 @@ const projectsData = [
     category: 'Wordpress Website Design',
     accent: 'adzum',
     icon: Globe,
-    desc: 'Developed a high-converting, blazing-fast WordPress website optimized for organic SEO, user retention, and enterprise client acquisition.',
+    desc: 'Developed a 15 page wordpress website for a tax advisor company in dubai. Website is optimized for SEO and integrated various plugins.',
     fullDesc: 'For AdzumGlobal, the objective was to transform their online digital presence into a conversion-oriented powerhouse. I designed and architected a premium responsive WordPress website, paying high attention to lightweight assets, clean UX flow, and standard search engine optimization guidelines.',
     goals: 'Improve loading speed under 1.5 seconds, overhaul visual branding, and double lead generation capabilities.',
     strategy: [
@@ -84,9 +84,9 @@ const projectsData = [
       'Conducted extensive technical SEO audit including Schema markup and page structure.'
     ],
     metrics: [
-      { label: 'Page Speed Increase', value: '85%' },
-      { label: 'Lead Generation Rate', value: '+120%' },
-      { label: 'Reduction in Bounce', value: '45%' }
+      { label: 'Google Page Speed Insight', value: '80+' },
+      { label: 'More Lead Gen on Landing Page', value: '100%' },
+      { label: 'Increased Website Opening Speed', value: '50%' }
     ]
   },
   {
@@ -95,19 +95,19 @@ const projectsData = [
     category: 'Complete Digital Marketing',
     accent: 'synops',
     icon: TrendingUp,
-    desc: 'Engineered an omni-channel growth engine spanning SEO strategy, high-intent Google Search campaigns, Meta advertising, and funnel automation.',
-    fullDesc: 'At Synops Labs, I spearheaded the complete digital marketing strategy from zero. By combining precision organic SEO with targeted, data-backed pay-per-click (PPC) advertisement campaigns, we constructed a reliable lead acquisition funnel that consistently reduced the client acquisition costs.',
-    goals: 'Rapidly scale qualified pipeline traffic, lower the CAC (Customer Acquisition Cost), and establish clear omni-channel attribution.',
+    desc: 'Implemented marketing strategy for services like AI WhatsApp Automation, AI content creation, AI workflow management, AI business processes, Custom CRM, and AI implementation.',
+    fullDesc: 'At Synops Labs, I spearheaded the complete digital marketing strategy from scratch. We focused on positioning and marketing their core services, including AI WhatsApp Automation, AI content creation, AI workflow management, AI business process optimization, Custom CRM setups, and enterprise AI implementations.',
+    goals: 'Scale lead acquisition velocity, improve conversion rates for AI products, and maximize overall marketing performance.',
     strategy: [
-      'Conducted exhaustive keyword research focusing on high-intent transactional terms.',
-      'Built and optimized hyper-targeted Meta and Google Ads campaigns.',
-      'Designed custom landing pages and set up full A/B testing on ad copies.',
-      'Automated nurture email sequences based on user interaction triggers.'
+      'Built targeted search and display campaigns for AI WhatsApp Automation solutions.',
+      'Created content marketing funnels explaining AI workflow and process optimization.',
+      'Configured CRM lead tracking pipelines to improve closing rates for enterprise accounts.',
+      'Automated follow-up and booking workflows for AI implementation inquiries.'
     ],
     metrics: [
-      { label: 'Ads ROAS Average', value: '4.8x' },
-      { label: 'Qualified Leads', value: '+180%' },
-      { label: 'Reduction in CAC', value: '35%' }
+      { label: 'More Leads Generated', value: '40%' },
+      { label: 'Meetings Booked', value: '30+' },
+      { label: 'Increase in Overall Marketing Growth', value: '68%' }
     ]
   },
   {
@@ -134,22 +134,22 @@ const projectsData = [
   {
     id: 'gameson',
     title: 'Gameson',
-    category: 'Social Media Marketing',
+    category: 'Meta Ads - Campaign for Events & Store',
     accent: 'gameson',
     icon: Sparkles,
-    desc: 'Crafted viral short-form video campaigns, custom content calendars, and interactive community activation strategies across major channels.',
-    fullDesc: 'For Gameson, the focus was all about community and engagement. I designed a strategic, high-frequency social media blueprint focused on viral vertical reels and YouTube shorts, driving a massive increase in organic reach and scaling their interactive Discord community.',
-    goals: 'Build a highly active brand community, increase reels organic reach, and drive loyal users to Discord and product links.',
+    desc: 'Ran targeted Meta ad campaigns for events and store visits for Gameson, a premium gaming experience center where you play various games and activities.',
+    fullDesc: 'Gameson is a high-end gaming experience center where players come to play various games and engage in gaming activities. I ran hyper-targeted Meta ad campaigns to promote their physical location and community events, using lead generation strategies to bring gamers directly through the door.',
+    goals: 'Drive foot traffic to the physical store during events, increase overall store sales, and maintain recurring player engagement.',
     strategy: [
-      'Developed a high-retention content calendar tailored to gaming culture trends.',
-      'Scripted and structured viral-optimized Instagram Reels and YouTube Shorts.',
-      'Hosted community-driven tournaments and activation giveaways.',
-      'Established highly engaging brand voice interactions across comment sections.'
+      'Developed and optimized Meta lead generation ad sets for major tournaments and events.',
+      'Implemented local awareness campaigns targeting active gamers in the immediate area.',
+      'A/B tested creative hooks showcasing gaming stations and competitive events.',
+      'Maintained retargeting campaigns to turn one-time attendees into recurring in-store players.'
     ],
     metrics: [
-      { label: 'Total Organic Reach', value: '2.1M+' },
-      { label: 'Engagement Rate', value: '+320%' },
-      { label: 'Discord Members', value: '4,500+' }
+      { label: 'Instore Visits via Lead Gen Ads', value: '100+' },
+      { label: 'Sales Increase', value: '20%' },
+      { label: 'Recurring Instore Visits', value: 'Maintained' }
     ]
   },
   {
@@ -158,19 +158,17 @@ const projectsData = [
     category: 'Social Media & Graphic Design',
     accent: 'equestrian',
     icon: PenTool,
-    desc: 'Elevated brand aesthetic for a luxury equestrian organization through high-end minimalist graphics, premium layouts, and regional campaigns.',
-    fullDesc: 'Equestrian Oman requested a premium brand identity online. I created a unified digital design guidelines framework, designing high-end minimalist graphics and layouts that appeal directly to luxury equestrian circles in the Middle East, while executing hyper-targeted regional campaigns.',
-    goals: 'Reposition the brand aesthetic into the luxury sector, establish premium graphic templates, and boost high-net-worth regional engagement.',
+    desc: 'Elevated brand aesthetic for Equestrian Oman, a luxury equestrian organization, by producing premium social media layouts and targeted ad creatives.',
+    fullDesc: 'For Equestrian Oman, a premier luxury equestrian organization, I redesigned their digital visual presence. I developed high-end minimalist graphic assets for their social media grids and produced custom layouts optimized for paid advertising campaigns.',
+    goals: 'Establish a luxury brand aesthetic, design high-quality social assets, and create compelling ad graphics.',
     strategy: [
-      'Curated an elegant, minimal visual palette utilizing deep gold and pristine tones.',
-      'Designed premium editorial-style graphic templates for Instagram grids.',
-      'Managed local and regional targeted advertising campaigns for niche audiences.',
-      'Produced custom branding collateral, highlighting elite equestrian events.'
+      'Designed premium editorial-style graphic templates for social media grids.',
+      'Produced custom high-impact visual assets optimized for regional ad campaigns.',
+      'Curated cohesive color palettes reflecting luxury equestrian branding guidelines.'
     ],
     metrics: [
-      { label: 'Premium Followers', value: '+140%' },
-      { label: 'Graphic Assets Crafted', value: '90+' },
-      { label: 'Direct Lead Messages', value: '+210%' }
+      { label: 'Social Media Assets Created', value: '30+' },
+      { label: 'Assets Created for Ads', value: '10+' }
     ]
   },
   {
