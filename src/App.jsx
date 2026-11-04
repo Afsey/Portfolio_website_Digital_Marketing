@@ -22,7 +22,13 @@ import {
   Mail,
   ArrowUp,
   MessageCircle,
-  Share2
+  Share2,
+  Search,
+  BarChart2,
+  FileText,
+  Megaphone,
+  Layout,
+  Star
 } from 'lucide-react';
 import myProfileImg from './assets/Hero_Section_myimage.jpeg';
 
@@ -65,6 +71,100 @@ const Linkedin = ({ size = 24, ...props }) => (
   </svg>
 );
 
+
+// Services Data
+const servicesData = [
+  {
+    id: 'seo',
+    icon: Search,
+    title: 'SEO & Website Optimization',
+    description: 'Dominate search results with data-driven SEO strategies crafted for both traditional search engines and next-gen AI-powered search experiences.',
+    features: [
+      'Technical SEO Audit & Fixes',
+      'On-Page & Off-Page SEO',
+      'AI & Generative Engine Optimization',
+      'Schema Markup & Structured Data',
+      'Core Web Vitals Optimization',
+      'Keyword Strategy & Content Planning',
+    ],
+    tags: ['GEO Ready', 'AI-Optimized'],
+  },
+  {
+    id: 'social',
+    icon: Megaphone,
+    title: 'Social Media Marketing',
+    description: 'Build an engaged community and amplify your brand voice across platforms with creative content strategies that convert followers into loyal customers.',
+    features: [
+      'Platform Strategy (Instagram, LinkedIn)',
+      'Content Calendar & Scheduling',
+      'Reels & Short-Form Video Scripts',
+      'Audience Growth & Engagement',
+      'Brand Voice & Visual Identity',
+      'Analytics & Performance Reports',
+    ],
+    tags: ['Organic Growth', 'Content-First'],
+  },
+  {
+    id: 'ads',
+    icon: BarChart2,
+    title: 'Google Ads & Paid Advertising',
+    description: 'Maximize your ROI with precisely targeted paid campaigns across Google and Meta — every rupee spent is tracked and optimized for results.',
+    features: [
+      'Google Search & Display Campaigns',
+      'Meta Ads (Facebook & Instagram)',
+      'Lead Generation Campaigns',
+      'Retargeting & Lookalike Audiences',
+      'A/B Testing & Ad Creatives',
+      'Monthly Performance Reporting',
+    ],
+    tags: ['Performance Marketing', 'ROI Focused'],
+  },
+  {
+    id: 'content',
+    icon: FileText,
+    title: 'Content & Email Marketing',
+    description: 'Craft compelling narratives and automated email sequences that nurture prospects, build trust, and turn subscribers into paying customers.',
+    features: [
+      'Blog & Long-Form Content Writing',
+      'Email Drip Campaign Design',
+      'Newsletter Strategy & Copywriting',
+      'Lead Magnet Creation',
+      'Content Repurposing Strategy',
+      'CTA Optimization & Funnels',
+    ],
+    tags: ['Conversion-Led', 'Automated'],
+  },
+  {
+    id: 'web',
+    icon: Layout,
+    title: 'WordPress Website Design',
+    description: 'Get a fast, beautiful, and SEO-optimized WordPress website that positions your brand professionally and converts visitors into leads.',
+    features: [
+      'Custom Theme & Page Builder Design',
+      'Speed & Performance Optimization',
+      'SEO-Ready Site Architecture',
+      'Plugin Integration & Configuration',
+      'Mobile-Responsive Layouts',
+      'Contact Forms & Lead Capture',
+    ],
+    tags: ['SEO-Ready', 'Mobile-First'],
+  },
+  {
+    id: 'freelance',
+    icon: Star,
+    title: 'Freelance Digital Marketing',
+    description: 'Flexible, end-to-end digital marketing support for startups and small businesses — strategy, execution, and growth, all under one roof.',
+    features: [
+      'Full-Stack Marketing Strategy',
+      'Multi-Channel Campaign Management',
+      'Brand Positioning & Messaging',
+      'Monthly Growth Consulting',
+      'Competitor & Market Analysis',
+      'Transparent Reporting & Insights',
+    ],
+    tags: ['All-in-One', 'Flexible Plans'],
+  },
+];
 
 // 7 Projects Data with rich high-saturation color accents
 const projectsData = [
@@ -607,6 +707,11 @@ export default function App() {
                 </a>
               </li>
               <li>
+                <a href="#services" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }}>
+                  Services
+                </a>
+              </li>
+              <li>
                 <a href="#about" className="nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>
                   About Me
                 </a>
@@ -632,6 +737,7 @@ export default function App() {
               <div className="mobile-dropdown">
                 <a href="#home" style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }} onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>Home</a>
                 <a href="#projects" style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }} onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}>Projects</a>
+                <a href="#services" style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }} onClick={(e) => { e.preventDefault(); scrollToSection('services'); }}>Services</a>
                 <a href="#about" style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }} onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>About Me</a>
                 <a href="#contact" style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)' }} onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Contact</a>
               </div>
@@ -702,6 +808,53 @@ export default function App() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== Services Section ===== */}
+        <section id="services" className="services-section">
+          <div className="container">
+            <div className="section-header" style={{ textAlign: 'center', marginBottom: '3rem' }}>
+              <div className="section-subtitle">What I Do</div>
+              <h2 className="section-title">Services I Offer</h2>
+              <p style={{ color: 'var(--text-secondary)', maxWidth: '580px', margin: '0.5rem auto 0' }}>
+                End-to-end digital marketing expertise to grow your brand, attract leads, and convert them into lasting customers.
+              </p>
+            </div>
+
+            <div className="services-grid">
+              {servicesData.map((service) => {
+                const Icon = service.icon;
+                return (
+                  <div className="service-card" key={service.id}>
+                    {/* Left Panel */}
+                    <div className="service-card-left">
+                      <div className="service-icon-box">
+                        <Icon size={28} />
+                      </div>
+                      <h3 className="service-card-title">{service.title}</h3>
+                      <p className="service-card-desc">{service.description}</p>
+                      <div className="service-tags-row">
+                        {service.tags.map((tag) => (
+                          <span className="service-tag" key={tag}>{tag}</span>
+                        ))}
+                      </div>
+                    </div>
+                    {/* Right Panel */}
+                    <div className="service-card-right">
+                      <ul className="service-features-grid">
+                        {service.features.map((f) => (
+                          <li className="service-feature-item" key={f}>
+                            <span className="service-check-icon"><Check size={14} /></span>
+                            <span>{f}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -1187,6 +1340,7 @@ export default function App() {
             <ul className="footer-nav">
               <li><a href="#" className="footer-nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}>Home</a></li>
               <li><a href="#" className="footer-nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}>Projects</a></li>
+              <li><a href="#" className="footer-nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }}>Services</a></li>
               <li><a href="#" className="footer-nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>About Me</a></li>
               <li><a href="#" className="footer-nav-link" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Contact</a></li>
             </ul>
